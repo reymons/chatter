@@ -1,0 +1,150 @@
+<!DOCTYPE>
+<html>
+    <head>
+        <title>Chatter</title>
+        <meta charset="utf8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="/static/vendor/mutex.js" defer></script>
+        <script src="/static/vendor/rtc.js" defer></script>
+        <script src="/static/room.js" defer></script>
+        <link href="/static/common.css" rel="stylesheet" type="text/css">
+        <link href="/static/component.css" rel="stylesheet" type="text/css">
+        <style>
+            .content {
+                padding: 1rem;
+                display: flex;
+                height: 100%;
+            }
+            .content__left,
+            .content__messages-wrapper {
+                border-radius: 1rem;
+                background: linear-gradient(180deg, black, #181818f5, #161616);
+                height: 100%;
+                padding: 1.5rem;
+            }
+            .content__left {
+                flex-grow: 1;
+                display: flex;
+                flex-direction: column;
+            }
+            .content__right {
+                overflow: hidden;
+                flex-shrink: 0;
+                width: 0;
+                transition: width 150ms ease-in-out;
+            }
+            .content__right--open {
+                width: 27.5%;
+                max-width: 37.5rem;
+            }
+            .content__videos {
+                flex-grow: 1;
+            }
+            .controls {
+                flex-shrink: 0;
+                display: flex;
+                gap: 1rem;
+                align-items: center;
+            }
+            .content__messages-wrapper {
+                margin-left: 1.5rem;
+                display: flex;
+                flex-direction: column;
+                row-gap: 1rem;
+            }
+            .content__messages {
+                flex-grow: 1;
+            }
+            .content__messages-button {
+                width: 100%;
+            }
+            .controls__btn {
+                padding: 5px;
+            }
+            .mic__icon-off {
+                display: none;
+            }
+            .mic--disabled .mic__icon-on {
+                display: none;
+            }
+            .mic--disabled .mic__icon-off {
+                display: block;
+            }
+            .camera__icon-off {
+                display: none;
+            }
+            .camera--disabled .camera__icon-on {
+                display: none;
+            }
+            .camera--disabled .camera__icon-off {
+                display: block;
+            }
+            .content__videos {
+                display: grid;
+                gap: 1rem;
+                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+                grid-auto-rows: max-content;
+                overflow: auto;
+            }
+            .content__video-wrapper {
+                aspect-ratio: 16 / 9;
+                overflow: hidden;
+                border-radius: 15px;
+                background: linear-gradient(to right, #0f0c29, #302b63, #24243e);
+            }
+        </style>
+    </head>
+    <body>
+        <main>
+            <div class="content">
+                <div class="content__left">
+                    <div class="content__videos" id="videos">
+                    </div>
+                    <div class="controls">
+                        <button class="controls__btn mic mic--disabled">
+                            <svg class="mic__icon-on" width="32px" height="32px">
+                                <use href="/static/sprite/controls.svg#mic-on"></use>
+                            </svg>
+                            <svg class="mic__icon-off" width="32px" height="32px">
+                                <use href="/static/sprite/controls.svg#mic-off"></use>
+                            </svg>
+                        </button>
+                        <button class="controls__btn camera camera--disabled">
+                            <svg class="camera__icon-on" width="32px" height="32px">
+                                <use href="/static/sprite/controls.svg#camera-on"></use>
+                            </svg>
+                            <svg class="camera__icon-off" width="32px" height="32px">
+                                <use href="/static/sprite/controls.svg#camera-off"></use>
+                            </svg>
+                        </button>
+                        <button class="controls__btn" id="chat-btn">
+                            <svg width="32px" height="32px">
+                                <use href="/static/sprite/controls.svg#chat"></use>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="content__right">
+                    <div class="content__messages-wrapper">
+                        <div class="content__messages"></div>
+                        <form id="message-form">
+                            <textarea
+                                class="input"
+                                type="text"
+                                name="text"
+                                placeholder="Enter your message"
+                                required
+                                minLength="1"
+                                maxlength="300"
+                            ></textarea>
+                            <br><br>
+                            <button class="content__messages-button button button--blue">
+                                Send
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>

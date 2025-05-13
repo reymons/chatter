@@ -1,0 +1,62 @@
+<!DOCTYPE>
+<html>
+    <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+        <title>Chatter</title>
+        <meta charset="utf8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="/static/main.js" defer="defer"></script>
+        <link href="/static/common.css" rel="stylesheet" type="text/css">
+        <link href="/static/component.css" rel="stylesheet" type="text/css">
+        <style>
+            .wrapper {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            main {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding-bottom: 15dvh;
+            }
+            h1 {
+                font-size: 3rem;
+            }
+            form {
+                margin-top: 2rem;
+                display: flex;
+                gap: 1rem;
+                max-width: 30rem;
+                width: 100%;
+            }
+            form .cta-button {
+                background: linear-gradient(to right, #3a6186, #89253e);
+                font-weight: 600;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <main class="layout">
+                <h1>Welcome to Chatter!</h1>
+                <form id="room">
+                    <input
+                        class="input"
+                        type="number"
+                        name="maxRoomSize"
+                        placeholder="Enter max room capacity"
+                        required
+                        min="1"
+                        max="10"
+                    >
+                    <button class="cta-button button" type="submit">Join</button>
+                </form>
+            </main>
+        </div>
+    </body>
+</html>
