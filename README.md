@@ -18,6 +18,17 @@ const peers = new Map();
 const micBtn = document.getElementById("mic-btn");
 const cameraBtn = document.getElementById("camera-btn");
 
+
+// Map signaling server (SigServ) events to rtc methods and rtc events to signaling server methods
+// Basic session description exchange flow as follows:
+
+// SigServ sends "session" -> rtc.makeOffer()   -> rtc sends "offer"  -> SigServ.sendOffer()  ->
+// SigServ sends "offer"   -> rtc.acceptOffer() -> rtc sends "answer" -> SigServ.sendAnswer() ->
+// SigServ sends "answer"  -> rtc.acceptAnswer()
+
+// Meanwhile in the background there's going to be an ICE candidates exchange in the following manner:
+// rtc sends "candidate" -> SigServ.sendCandidate() -> SigServ sends "candidate" -> rtc.addCandidate()
+
 signalingServer.on("session", sessionIds => {
     sessionIds.forEach(id => rtc.makeOffer(id));
 });
@@ -26,7 +37,14 @@ signalingServer.on("answer", data => rtc.acceptAnswer(data.sessionId, data.answe
 signalingServer.on("candidate", data => rtc.addCandidate(data.sessionId, data.candidateInfo));
 signalingServer.on("disconnect", data => rtc.removePeer(data.sessionId));
 
-// You can assign each listener with rtc.even.on or use rtc.event.map
+rtc.event.map({
+    offer: ({ peerId, offer }) => signalingServer.sendOffer(peerId, offer),
+    answer: ({ peerId, answer }) => signalingServer.sendAnswer(peerId, answer),
+    candidate: ({ peerId, candidateInfo }) => signalingServer.sendCandidateInfo(peerId, candidateInfo),
+});
+
+
+// Manage peer life cycle, streams, track states, etc...
 rtc.event.map({
     peerconnected: ({ peerId }) => {
         peers.set(peerId, createPeerElements());
@@ -58,6 +76,8 @@ rtc.event.map({
     }
 });
 
+
+// Manipulate local streams
 micBtn.onclick = () => {
     if (rtc.localAudioEnabled) rtc.disableLocalAudio();
     else rtc.enableLocalAudio();
