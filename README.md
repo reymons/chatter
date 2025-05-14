@@ -10,7 +10,7 @@ NOT adapted for mobile devices.
 ## Peer pool
 The implementation of the pool is in `client/static/vendor/rtc.js`<br><br>
 Here's a simple video conference app. Receive remote media streams, manage peer life cycle, toggle your microphone and camera.
-```
+```js
 const roomId = "some-id";
 const rtc = WebRTC();
 const signalingServer = new SignalingServer(roomId); // Your implementation
